@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"errors"
 	"slices"
+	"time"
 
 	"google.golang.org/protobuf/proto"
 
@@ -151,6 +152,7 @@ func (cli *Client) handleDeviceNotification(ctx context.Context, node *waBinary.
 		newParticipantHash := participantListHashV2(cached.devices)
 		if newParticipantHash == deviceHash {
 			cli.Log.Debugf("%s's device list hash changed from %s to %s (%s). New hash matches", from, cachedParticipantHash, deviceHash, child.Tag)
+			cached.ts = time.Now().Unix()
 			cli.userDevicesCache[from] = cached
 		} else {
 			cli.Log.Warnf("%s's device list hash changed from %s to %s (%s). New hash doesn't match (%s)", from, cachedParticipantHash, deviceHash, child.Tag, newParticipantHash)
@@ -160,6 +162,7 @@ func (cli *Client) handleDeviceNotification(ctx context.Context, node *waBinary.
 			newLIDParticipantHash := participantListHashV2(cachedLID.devices)
 			if newLIDParticipantHash == deviceLIDHash {
 				cli.Log.Debugf("%s's device list hash changed from %s to %s (%s). New hash matches", fromLID, cachedLIDHash, deviceLIDHash, child.Tag)
+				cachedLID.ts = time.Now().Unix()
 				cli.userDevicesCache[*fromLID] = cachedLID
 			} else {
 				cli.Log.Warnf("%s's device list hash changed from %s to %s (%s). New hash doesn't match (%s)", fromLID, cachedLIDHash, deviceLIDHash, child.Tag, newLIDParticipantHash)
@@ -205,7 +208,7 @@ func (cli *Client) handleOwnDevicesNotification(ctx context.Context, node *waBin
 		delete(cli.userDevicesCache, ownID)
 	} else {
 		cli.Log.Debugf("Received own device list change notification %s -> %s", oldHash, newHash)
-		cli.userDevicesCache[ownID] = deviceCache{devices: newDeviceList, dhash: expectedNewHash}
+		cli.userDevicesCache[ownID] = deviceCache{devices: newDeviceList, dhash: expectedNewHash, ts: time.Now().Unix()}
 	}
 }
 

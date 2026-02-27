@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"time"
 
 	"google.golang.org/protobuf/proto"
 
@@ -480,7 +481,7 @@ func (cli *Client) GetUserDevices(ctx context.Context, jids []types.JID) ([]type
 				continue
 			}
 			userDevices := parseDeviceList(jid, user.GetChildByTag("devices"))
-			cli.userDevicesCache[jid] = deviceCache{devices: userDevices, dhash: participantListHashV2(userDevices)}
+			cli.userDevicesCache[jid] = deviceCache{devices: userDevices, dhash: participantListHashV2(userDevices), ts: time.Now().Unix()}
 			devices = append(devices, userDevices...)
 		}
 	}
@@ -781,6 +782,7 @@ func parseFBDeviceList(user types.JID, deviceList waBinary.Node) deviceCache {
 	return deviceCache{
 		devices: devices,
 		dhash:   deviceList.AttrGetter().String("dhash"),
+		ts:      time.Now().Unix(),
 	}
 }
 

@@ -1,0 +1,5 @@
+<call id="stanza-transport-1" from="155500001@s.whatsapp.net" t="1700000000">
+  <transport call-id="call-transport-1" call-creator="155500002@s.whatsapp.net" username="caller-name">
+    01020304AABBCC
+  </transport>
+</call>

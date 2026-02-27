@@ -1,0 +1,3 @@
+<ack class="call" type="relaylatency" id="relay-latency-stanza-1" to="155500001@s.whatsapp.net">
+  <relaylatency call-id="call-relay-1" call-creator="155500002@s.whatsapp.net" />
+</ack>

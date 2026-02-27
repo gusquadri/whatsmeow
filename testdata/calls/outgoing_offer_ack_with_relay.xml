@@ -1,0 +1,11 @@
+<ack class="call" type="offer" id="offer-stanza-123" to="12345@s.whatsapp.net">
+  <relay uuid="relay-uuid" self_pid="3" peer_pid="1">
+    <hbh_key>AQEBAQ==</hbh_key>
+    <key>AgICAg==</key>
+    <token id="0">token-0</token>
+    <auth_token id="0">auth-0</auth_token>
+    <te2 relay_id="2" relay_name="for2c02" token_id="0" auth_token_id="0" protocol="1" c2r_rtt="42">
+      0A141E280D98
+    </te2>
+  </relay>
+</ack>

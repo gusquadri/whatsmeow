@@ -55,6 +55,7 @@ type wrappedEventHandler struct {
 type deviceCache struct {
 	devices []types.JID
 	dhash   string
+	ts      int64
 }
 
 // Client contains everything necessary to connect to and interact with the WhatsApp web API.
@@ -193,6 +194,8 @@ type Client struct {
 	// The library is currently embedded in mautrix-meta (https://github.com/mautrix/meta), but may be separated later.
 	MessengerConfig *MessengerConfig
 	RefreshCAT      func(context.Context) error
+
+	callManager *CallManager
 }
 
 type groupMetaCache struct {
@@ -271,10 +274,12 @@ func NewClient(deviceStore *store.Device, log waLog.Logger) *Client {
 
 		BackgroundEventCtx: context.Background(),
 	}
+	cli.callManager = NewCallManager(cli)
 	cli.nodeHandlers = map[string]nodeHandler{
 		"message":      cli.handleEncryptedMessage,
 		"appdata":      cli.handleEncryptedMessage,
 		"receipt":      cli.handleReceipt,
+		"ack":          cli.handleAckNode,
 		"call":         cli.handleCallEvent,
 		"chatstate":    cli.handleChatState,
 		"presence":     cli.handlePresence,
